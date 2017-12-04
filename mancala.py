@@ -10,6 +10,7 @@ import subprocess
 
 
 # constants
+PIT_MAX = 6
 
 
 def timing_function(timed_function):
@@ -28,6 +29,8 @@ def main():
     ''' main function '''
     m = Mancala('M')
     m.dump_status()
+    m.play()
+    m.dump_status()
 
 
 
@@ -38,31 +41,76 @@ class Mancala(object):
     ''' mancala container '''
     def __init__(self, name):
         ''' constructor '''
-        self._pits = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-        self._player_A_store = 0
-        self._player_B_store = 0
+        self._pit_a = [4, 4, 4, 4, 4, 4]
+        self._pit_b = [4, 4, 4, 4, 4, 4]
+        self._store_a = 0
+        self._store_b = 0
+
+def play(self):
+        ''' play  the game '''
+        print('Which pit (1 to 6)?')
+        self.process_input(self.validate_input(1, 6, (int(raw_input('Input:')))))
+        
+    def process_input(self, pit):
+        ''' process '''
+        index = pit-1
+        hand = 0
+        # empty first pit
+        hand = hand + self._pit_a[index]
+        self._pit_a[index] = 0
+        # add to own pits
+        index += 1
+        while hand > 0 and index < PIT_MAX:
+            hand, self._pit_a[index] = self.transfer(hand, self._pit_a[index])
+            index += 1
+        # add to own store
+        if hand > 0:
+            hand, self._store_a = self.transfer(hand, self._store_a)
+        # add to opps store
+        index = 0
+        while hand > 0 and index < PIT_MAX:
+            hand, self._pit_b[index] = self.transfer(hand, self._pit_b[index])
+            index += 1
+
+    def transfer(self, a, b):
+        ''' returm a tuple, transfering 1 from a to b '''
+        if a > 0:
+            a -= 1
+            b += 1
+        return a, b
+
+    def validate(self, min, max, value):
+        ''' check range of user input '''
+        if min > value:
+            return min
+            else if max > value:
+            return max
+        else:
+            return value
+        
+
+
     def dump_status(self):
         ''' outputs text status of the game '''
-        print 'Mancala Status\n'
-        print ('Store B     B6   B5   B4   B3   B2   B1      Store A\n'
-               '   {}        {}    {}    {}    {}    {}    {}        {}\n'
-               '            {}    {}    {}    {}    {}    {}\n'
-               '            A1   A2   A3   A4   A5   A6\n\n'.format(
-                self._player_B_store, 
-                self._pits[11], 
-                self._pits[10], 
-                self._pits[9], 
-                self._pits[8], 
-                self._pits[7], 
-                self._pits[6], 
-                self._player_A_store,
-                self._pits[0],
-                self._pits[1],
-                self._pits[2],
-                self._pits[3],
-                self._pits[4],
-                self._pits[5]))
-
+        print '\n\nMancala Status\n'
+        print ('                  B6   B5   B4   B3   B2   B1\n'
+               'Store B           {}    {}    {}    {}    {}    {}        Store A\n'
+               '   {}              {}    {}    {}    {}    {}    {}           {}\n'
+               '                  A1   A2   A3   A4   A5   A6\n\n'.format(
+                self._pit_b[5], 
+                self._pit_b[4], 
+                self._pit_b[3], 
+                self._pit_b[2], 
+                self._pit_b[1], 
+                self._pit_b[0], 
+                self._store_b, 
+                self._pit_a[0],
+                self._pit_a[1],
+                self._pit_a[2],
+                self._pit_a[3],
+                self._pit_a[4],
+                self._pit_a[5],
+                self._store_a))
 
 
 
