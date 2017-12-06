@@ -46,10 +46,10 @@ class Mancala(object):
         self._store_a = 0
         self._store_b = 0
 
-def play(self):
+    def play(self):
         ''' play  the game '''
         print('Which pit (1 to 6)?')
-        self.process_input(self.validate_input(1, 6, (int(raw_input('Input:')))))
+        self.process_input(self.validate(1, 6, (int(raw_input('Input:')))))
         
     def process_input(self, pit):
         ''' process '''
@@ -83,7 +83,7 @@ def play(self):
         ''' check range of user input '''
         if min > value:
             return min
-            else if max > value:
+        elif max < value:
             return max
         else:
             return value
