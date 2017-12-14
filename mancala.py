@@ -29,7 +29,7 @@ def main():
     ''' main function '''
     m = Mancala('M')
     m.dump_status()
-    m.play()
+    m.human_play()
     m.dump_status()
 
 
@@ -41,15 +41,21 @@ class Mancala(object):
     ''' mancala container '''
     def __init__(self, name):
         ''' constructor '''
+        # Four stones are placed in each of the 12 holes
         self._pit_a = [4, 4, 4, 4, 4, 4]
         self._pit_b = [4, 4, 4, 4, 4, 4]
+        # Each player has a store (called a Mancala) to the right side of the Mancala board
         self._store_a = 0
         self._store_b = 0
 
-    def play(self):
-        ''' play  the game '''
+    def human_play(self):
+        ''' play the game, get human player input'''
         print('Which pit (1 to 6)?')
         self.process_input(self.validate(1, 6, (int(raw_input('Input:')))))
+
+    def machine_play(self):
+        ''' computer makes move '''
+        pass
         
     def process_input(self, pit):
         ''' process '''
@@ -63,7 +69,7 @@ class Mancala(object):
         while hand > 0 and index < PIT_MAX:
             hand, self._pit_a[index] = self.transfer(hand, self._pit_a[index])
             index += 1
-        # add to own store
+        # If you run into your own store, deposit one piece in it.
         if hand > 0:
             hand, self._store_a = self.transfer(hand, self._store_a)
         # add to opps store
